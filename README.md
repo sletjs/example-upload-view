@@ -1,6 +1,8 @@
 # Getting Start
 
-这里是sletjs结合模板引擎来渲染view的示例
+这里是sletjs结合模板引擎+上传的示例
+
+基于https://github.com/sletjs/example-view，所以view相关不在解释
 
 ## 安装slet模块
 
@@ -8,6 +10,8 @@
 $ npm i -S slet
 $ npm i -S slet-viewcontroller
 $ npm i -S nunjucks
+
+$ npm i -S slet-uploadviewcontroller
 ```
 
 ## 从app.js开始
@@ -18,49 +22,41 @@ $ npm i -S nunjucks
 const Slet = require('slet');
 const app = new Slet({
     root: __dirname,
-    debug: true
+    debug: true,
+    upload: { dest: './uploads/'}
 });
 
 app.defineController(require('slet-viewcontroller'))
+app.defineController(require('slet-uploadviewcontroller'))
 
 app.router('/', require('./viewctrl') )  
+
+app.router('/upload', require('./uploadctrl') )  
 
 app.start(3000) 
 ```
 
-如果想定制，可以通过配置项来实现，这里采用系统默认的nunjucks作为模板引擎
+注意：如果不配置upload选项，会报错的。
 
-```
-const app = new Slet({
-    root: __dirname,
-    debug: true,
-    "views" :{
-        "path" : ".",
-        "option": { "map": {"html": "nunjucks" }}
-    },
-});
-
-```
-
-## 编写viewctrl.js
+## 编写uploadctrl.js
 
 ```
 'use strict';
 
-const ViewController = require('slet').ViewController
+const UploadViewController = require('slet').UploadViewController
 
-module.exports = class MyViewController extends ViewController {
+module.exports = class MyUploadController extends UploadViewController {
   constructor(app, ctx, next) {
     super(app, ctx, next)
+    
+    this.post_filter = [this.upload.single('avatar')]
   }
   
-  get() { 
-    let a = this.query.a
-    // this.renderType='view'
+  post() { 
     return {
       tpl: 'index',
       data: {
-        title: 'ssddssdd a= '+a
+        title: 'this a upload view'
       }
     }
   } 
@@ -68,13 +64,7 @@ module.exports = class MyViewController extends ViewController {
 
 ```
 
-## 创建index.html
-
-```
-<h1>{{title}}</h1>
-```
-
-如果不熟悉nunjucks模板引擎，请查看https://mozilla.github.io/nunjucks/
+如果通过`this.renderType = 'default'`也可以实现UploadController的效果
 
 ## 启动server
 
@@ -86,4 +76,6 @@ $ node app.js
 
 ## 查验结果
 
-在浏览器中打开 http://127.0.0.1:3000/?a=2
+打开postman
+
+![Postman](postman.png)
