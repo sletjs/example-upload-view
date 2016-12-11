@@ -23,20 +23,21 @@ const Slet = require('slet');
 const app = new Slet({
     root: __dirname,
     debug: true,
-    upload: { dest: './uploads/'}
+    // upload: { dest: './uploads/'}
 });
 
-app.defineController(require('slet-viewcontroller'))
-app.defineController(require('slet-uploadviewcontroller'))
+// slet@1.0.8之后可选，会自动注入依赖
+// app.defineController(require('slet-viewcontroller'))
+// app.defineController(require('slet-uploadviewcontroller'))
 
-app.router('/', require('./viewctrl') )  
+app.router('/', ('./viewctrl') )  
 
-app.router('/upload', require('./uploadctrl') )  
+app.router('/upload', ('./uploadctrl') )  
 
 app.start(3000) 
 ```
 
-注意：如果不配置upload选项，会报错的。
+注意：如果想配置upload选项，可以跟multer来配置。
 
 ## 编写uploadctrl.js
 
