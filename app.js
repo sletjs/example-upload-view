@@ -4,14 +4,15 @@ const Slet = require('slet');
 const app = new Slet({
     root: __dirname,
     debug: true,
-    upload: { dest: './uploads/'}
+    // upload: { dest: './uploads/'}
 });
 
-app.defineController(require('slet-viewcontroller'))
-app.defineController(require('slet-uploadviewcontroller'))
+// slet@1.0.8之后可选，会自动注入依赖
+// app.defineController(require('slet-viewcontroller'))
+// app.defineController(require('slet-uploadviewcontroller'))
 
-app.router('/', require('./viewctrl') )  
+app.router('/', ('./viewctrl') )  
 
-app.router('/upload', require('./uploadctrl') )  
+app.router('/upload', ('./uploadctrl') )  
 
 app.start(3000) 
