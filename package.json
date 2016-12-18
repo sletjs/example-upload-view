@@ -22,6 +22,6 @@
     "nunjucks": "^3.0.0",
     "slet": "^1.0.8",
     "slet-uploadviewcontroller": "^1.0.2",
-    "slet-viewcontroller": "^1.0.5"
+    "slet-viewcontroller": "^1.2.4"
   }
 }
